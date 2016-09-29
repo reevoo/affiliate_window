@@ -13,5 +13,12 @@ class AffiliateWindow
         results
       end
     end
+
+    def self.parse_quota(response)
+      header = response.header
+      quota = header.fetch(:get_quota_response)
+
+      Integer(quota)
+    end
   end
 end

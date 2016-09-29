@@ -10,6 +10,7 @@ class AffiliateWindow
             "api:sPassword" => affiliate_api_password,
             "api:sType" => "affiliate",
           },
+          "api:getQuota" => true,
         },
       )
     end

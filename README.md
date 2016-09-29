@@ -55,6 +55,19 @@ response
 #  }
 ```
 
+## Quota
+
+The API provides a daily quota of 15,000 requests per account. The remaining
+quota is returned in the header of each response. If this quota is reached,
+subsequent requests to the API will raise errors.
+
+You can check the remaining quota with:
+
+```ruby
+client.remaining_quota
+#=> 14997
+```
+
 ## Debugging
 
 You can print the SOAP request bodies by enabling debug mode:
