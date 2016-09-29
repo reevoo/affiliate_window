@@ -33,4 +33,13 @@ RSpec.describe AffiliateWindow::Parser do
       expect(result).to eq("results")
     end
   end
+
+  describe "#parse_quota" do
+    let(:response) { double(:response, header: { get_quota_response: "123" }) }
+
+    it "parses the quota from the response header" do
+      quota = subject.parse_quota(response)
+      expect(quota).to eq(123)
+    end
+  end
 end

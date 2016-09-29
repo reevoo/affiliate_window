@@ -2,7 +2,7 @@
 # http://wiki.affiliatewindow.com/index.php/Publisher_Service_API
 
 class AffiliateWindow
-  attr_accessor :client, :error_handler, :parser, :debug
+  attr_accessor :client, :error_handler, :parser, :debug, :remaining_quota
 
   def self.login(account_id:, affiliate_api_password:)
     client = Client.new(
@@ -114,6 +114,12 @@ class AffiliateWindow
     )
   end
 
+  def remaining_quota
+    @remaining_quota || raise(UnknownQuotaError,
+      "No requests have been made, so the remaining quota is unknown."
+    )
+  end
+
   private
 
   def call(method, params)
@@ -123,10 +129,14 @@ class AffiliateWindow
       client.call(method, params, debug)
     end
 
+    self.remaining_quota = parser.parse_quota(response)
+
     parser.parse(response, method)
   end
 
   def remove_nils(params)
     params.reject { |_, value| value.nil? }
   end
+
+  class UnknownQuotaError < StandardError; end
 end

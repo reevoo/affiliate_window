@@ -47,6 +47,22 @@ RSpec.describe AffiliateWindow do
         i_rows_returned: "2",
       )
     end
+
+    it "tracks the quota after making a request" do
+      expect {
+        client.remaining_quota
+      }.to raise_error(described_class::UnknownQuotaError)
+
+      client.get_transaction_list(
+        start_date: "2015-12-25T12:00:00",
+        end_date: "2015-12-26T12:00:00",
+        date_type: "transaction",
+        limit: 2,
+        offset: 20,
+      )
+
+      expect(client.remaining_quota).to eq 13154
+    end
   end
 
   context "with invalid credentials" do
